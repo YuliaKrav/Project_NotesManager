@@ -16,7 +16,7 @@ SAVE_ALL_RECORDS_TO_FILE = "Saving all of the notes"
 UPDATE_RECORDS_WINDOW_HEADER = "Updating the list of the notes"
 FILTER_RECORDS_WINDOW_HEADER = "Filtering all of the notes"
 
-global number_of_all_notes 
+global number_of_all_notes
 
 
 def show_data_message(header, message):
@@ -59,8 +59,10 @@ def remove_notes(tree_view, list_for_deleteng):
 
     # Remove all notes
 
+
 def remove_all_notes_without_message(tree_view):
     remove_notes(tree_view, tree_view.get_children())
+
 
 def remove_all_notes(tree_view):
 
@@ -87,6 +89,7 @@ def remove_many_notes(tree_view):
     show_notes_on_tree_view(tree_view, all_data)
     delete_data_message()
 
+
 def save_all_notes(tree_view):
     save_window_message = "All changes were saved.\n"
 
@@ -94,8 +97,9 @@ def save_all_notes(tree_view):
     file_worker.write_to_csv_file(all_data)
     show_data_message(SAVE_ALL_RECORDS_TO_FILE, save_window_message)
 
+
 def show_notes_on_tree_view(tree_view, notes):
-# Add data
+    # Add data
     global number_of_all_notes
     remove_all_notes_without_message(tree_view)
     number_of_all_notes = 1
@@ -113,11 +117,10 @@ def show_all_notes(tree_view):
     show_notes_on_tree_view(tree_view, all_data)
     show_all_data_message = f'There is/are {len(all_data)} note/s)'
     show_data_message(SWOW_ALL_RECORDS_HEADER, show_all_data_message)
-    
 
 
 def main_menu():
-    global number_of_all_notes 
+    global number_of_all_notes
     number_of_all_notes = 1
     root = Tk()
     root.title("Application Notes")
@@ -135,6 +138,7 @@ def main_menu():
     style.map("Treeview",
               background=[("selected", "green")]
               )
+
 
     show_save_frame = Frame(root)
     show_save_frame.pack(pady=20)
@@ -294,10 +298,18 @@ def main_menu():
     # Filter notes
     def filter_all_notes():
         filter_window_empty_message = "There is no possibilities to filter notes. Not all fields are filled."
-        if not data_checker.check_data_empty_at_least_one(from_year_box.get(), from_month_box.get(), from_day_box.get(), 
-        to_year_box.get(), to_month_box.get(), to_day_box.get()):
+        is_filled_fields = data_checker.check_data_empty_at_least_one(from_year_box.get(), from_month_box.get(), from_day_box.get(),
+                                                          to_year_box.get(), to_month_box.get(), to_day_box.get())
+        if not is_filled_fields:
             show_data_message(ADD_WINDOW_HEADER, filter_window_empty_message)
             return
+
+        is_correct_date1 = data_checker.check_date_values(from_year_box.get(), from_month_box.get(), from_day_box.get()) 
+        is_correct_date2 = data_checker.check_date_values(to_year_box.get(), to_month_box.get(), to_day_box.get())
+
+        if not is_correct_date1 or not is_correct_date2:
+            show_data_message(ADD_WINDOW_HEADER, filter_window_empty_message)
+            return   
 
         hour_max = 23
         min_max = 59

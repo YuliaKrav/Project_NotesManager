@@ -1,3 +1,5 @@
+import datetime
+
 def delete_extra_spaces(string_original):
     string_original = string_original.strip()
     return string_original
@@ -22,4 +24,18 @@ def check_data_empty_at_least_one(*data):
         if item == "":
             return False
     return True
+
+def  check_date_values(*data):
+    format = "%Y-%m-%d"
+    date_str = "-".join(data)
+
+    result = True
+ 
+    try:
+        result = bool(datetime.datetime.strptime(date_str, format))
+    except ValueError:
+        result = False
+    
+    return result
+
 
